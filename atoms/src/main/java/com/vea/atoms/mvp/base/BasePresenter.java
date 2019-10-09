@@ -53,16 +53,18 @@ public class BasePresenter<T extends IView> implements IPresenter<T> {
 
     @Override
     public void attachView(T view) {
-        if(mView == null){
+        if (mView == null) {
             mView = new WeakReference<T>(view);
         }
     }
 
     @Override
     public void detachView() {
+        dispose();
+
         mView.clear();
         mView = null;
-        dispose();
+        mDisposables = null;
     }
 
     public T getView() {
@@ -72,7 +74,9 @@ public class BasePresenter<T extends IView> implements IPresenter<T> {
         return null;
     }
 
-    //取消所有的订阅
+    /**
+     * 取消所有的订阅
+     */
     public void dispose() {
         if (mDisposables != null) {
             mDisposables.clear();
@@ -80,7 +84,9 @@ public class BasePresenter<T extends IView> implements IPresenter<T> {
     }
 
     protected void addSubscription(Disposable disposable) {
-        if (disposable == null) return;
+        if (disposable == null) {
+            return;
+        }
         if (mDisposables == null) {
             mDisposables = new CompositeDisposable();
         }
