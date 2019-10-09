@@ -37,7 +37,6 @@ import java.util.zip.Inflater;
  */
 public class ZipHelper {
 
-
     private ZipHelper() {
         throw new IllegalStateException("you can't instantiate me!");
     }
@@ -51,7 +50,6 @@ public class ZipHelper {
     public static String decompressToStringForZlib(byte[] bytesToDecompress) {
         return decompressToStringForZlib(bytesToDecompress, "UTF-8");
     }
-
 
     /**
      * zlib decompress 2 String
@@ -83,7 +81,6 @@ public class ZipHelper {
         return returnValue;
 
     }
-
 
     /**
      * zlib decompress 2 byte
