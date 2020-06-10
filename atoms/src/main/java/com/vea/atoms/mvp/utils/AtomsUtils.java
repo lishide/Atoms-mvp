@@ -21,6 +21,7 @@ import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import android.widget.Toast;
 import com.vea.atoms.mvp.app.IApp;
 import com.vea.atoms.mvp.di.component.AppComponent;
 
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 
@@ -186,8 +188,7 @@ public class AtomsUtils {
      */
     public static <T extends View> T findViewByName(Context context, View view, String viewName) {
         int id = getResources(context).getIdentifier(viewName, "id", context.getPackageName());
-        T v = (T) view.findViewById(id);
-        return v;
+        return view.findViewById(id);
     }
 
     /**
@@ -200,8 +201,7 @@ public class AtomsUtils {
      */
     public static <T extends View> T findViewByName(Context context, Activity activity, String viewName) {
         int id = getResources(context).getIdentifier(viewName, "id", context.getPackageName());
-        T v = (T) activity.findViewById(id);
-        return v;
+        return activity.findViewById(id);
     }
 
     /**
@@ -211,8 +211,7 @@ public class AtomsUtils {
      * @return
      */
     public static int findLayout(Context context, String layoutName) {
-        int id = getResources(context).getIdentifier(layoutName, "layout", context.getPackageName());
-        return id;
+        return getResources(context).getIdentifier(layoutName, "layout", context.getPackageName());
     }
 
     /**
@@ -294,10 +293,7 @@ public class AtomsUtils {
     }
 
     public static boolean isEmpty(Object obj) {
-        if (obj == null) {
-            return true;
-        }
-        return false;
+        return obj == null;
     }
 
     /**
@@ -310,8 +306,13 @@ public class AtomsUtils {
     public static String encodeToMD5(String string) {
         byte[] hash = new byte[0];
         try {
-            hash = MessageDigest.getInstance("MD5").digest(
-                    string.getBytes("UTF-8"));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                hash = MessageDigest.getInstance("MD5").digest(
+                        string.getBytes(StandardCharsets.UTF_8));
+            } else {
+                hash = MessageDigest.getInstance("MD5").digest(
+                        string.getBytes("UTF-8"));
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

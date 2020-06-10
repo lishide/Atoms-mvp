@@ -45,12 +45,7 @@ import javax.xml.transform.stream.StreamSource;
  */
 public class CharacterHandler {
 
-    private CharacterHandler() {
-        throw new IllegalStateException("you can't instantiate me!");
-    }
-
-    public static final InputFilter emojiFilter = new InputFilter() {//emoji过滤器
-
+    public static final InputFilter EMOJI_FILTER = new InputFilter() {//emoji过滤器
         Pattern emoji = Pattern.compile(
                 "[\ud83c\udc00-\ud83c\udfff]|[\ud83d\udc00-\ud83d\udfff]|[\u2600-\u27ff]",
                 Pattern.UNICODE_CASE | Pattern.CASE_INSENSITIVE);
@@ -68,6 +63,9 @@ public class CharacterHandler {
         }
     };
 
+    private CharacterHandler() {
+        throw new IllegalStateException("you can't instantiate me!");
+    }
 
     /**
      * 字符串转换成十六进制字符串
@@ -77,19 +75,18 @@ public class CharacterHandler {
     public static String str2HexStr(String str) {
 
         char[] chars = "0123456789ABCDEF".toCharArray();
-        StringBuilder sb = new StringBuilder("");
+        StringBuilder sb = new StringBuilder();
         byte[] bs = str.getBytes();
         int bit;
 
-        for (int i = 0; i < bs.length; i++) {
-            bit = (bs[i] & 0x0f0) >> 4;
+        for (byte b : bs) {
+            bit = (b & 0x0f0) >> 4;
             sb.append(chars[bit]);
-            bit = bs[i] & 0x0f;
+            bit = b & 0x0f;
             sb.append(chars[bit]);
         }
         return sb.toString().trim();
     }
-
 
     /**
      * json 格式化
@@ -115,10 +112,11 @@ public class CharacterHandler {
             }
         } catch (JSONException e) {
             message = json;
+        } catch (OutOfMemoryError error) {
+            message = "Output omitted because of Object size";
         }
         return message;
     }
-
 
     /**
      * xml 格式化
