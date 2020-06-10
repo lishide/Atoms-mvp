@@ -19,15 +19,9 @@ import android.app.Application;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import com.from.view.swipeback.SwipeBackHelper;
 import com.squareup.leakcanary.LeakCanary;
-import com.squareup.leakcanary.RefWatcher;
 import com.vea.atoms.mvp.app.AppLifecycles;
-import com.vea.atoms.mvp.demo.BuildConfig;
-import com.vea.atoms.mvp.integration.cache.IntelligentCache;
-import com.vea.atoms.mvp.utils.AtomsUtils;
-
-import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * ================================================
@@ -52,7 +46,8 @@ public class AppLifecyclesImpl implements AppLifecycles {
         }
 
         LeakCanary.install(application);
-
+        // 一键侧滑返回
+        SwipeBackHelper.init(application);
 
     }
 
